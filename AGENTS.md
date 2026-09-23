@@ -19,7 +19,7 @@ shell.qml → BarWrapper.qml (panel per monitor) → Bar.qml
 
 | Path | Module name | Usage |
 |------|-------------|-------|
-| `services/` | `import "../../services" as QsServices` | 18 singletons |
+| `services/` | `import "../../services" as QsServices` | 19 singletons |
 | `config/` | `import "../../config" as QsConfig` | Config, AppearanceConfig |
 | `components/` | `import "../../components"` | Reusable UI primitives |
 | `components/effects/` | `import "../../components/effects"` | Material3Anim |
@@ -28,7 +28,7 @@ shell.qml → BarWrapper.qml (panel per monitor) → Bar.qml
 
 All services are QML `pragma Singleton` with `Process` objects for CLI calls.
 Services use `Timer`-based polling or `Connections` for event-driven updates.
-Core services support dynamic backends (e.g. `pactl`/`wpctl` for Audio, `iwctl`/`nmcli` for Network, `Niri`/`Hyprland` for Compositor controls).
+Core services support dynamic backends (e.g. `pactl`/`wpctl` for Audio, `iwctl`/`nmcli` for Network, `Wallpaper` for wallpaper switching & `wal` theme generation, `Niri`/`Hyprland` for Compositor controls).
 
 ```qml
 // services/Foo.qml
@@ -83,7 +83,7 @@ Debug output requires `QS_DEBUG=1` env var.
 - All QML files: `import QtQuick 6.10`
 - Properties: camelCase (e.g., `shouldShow`, `closeSidebar`)
 - Components: PascalCase filenames (e.g., `AuroraSurface.qml`, `IconButton.qml`)
-- Services: PascalCase matching export name (e.g., `Audio.qml`, `Network.qml`)
+- Services: PascalCase matching export name (e.g., `Audio.qml`, `Network.qml`, `Wallpaper.qml`)
 - Use `??` for defaults, `?.` for optional chaining
 - Use `Loader` with `asynchronous: true` for lazy loading
 - Avoid `sh -c` with template literals for shell commands — use positional args
