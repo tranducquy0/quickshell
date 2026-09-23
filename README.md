@@ -8,7 +8,7 @@ A modular desktop shell configuration built with [QuickShell](https://quickshell
 
 The project focuses on:
 - clean component boundaries (`components/`, `modules/`, `services/`)
-- dynamic theming via `pywal`
+- dynamic theming via `pywal` and integrated wallpaper switching
 - responsive UI behavior with smooth QML/scenegraph rendering
 - practical day-to-day features (OSD, notifications, launcher, dashboard, sidebar)
 - flexible system tooling support (`iwd`/`iwctl` or `NetworkManager`/`nmcli` networking, `pactl`/PulseAudio or `wpctl`/WirePlumber audio)
@@ -48,10 +48,10 @@ The project focuses on:
 
 ## Core Capabilities
 
-- Dynamic wallpaper-driven color integration using `pywal`
+- Dynamic wallpaper-driven color integration using `pywal` and automatic compositor background setting (`swww` / `swaybg` / `hyprpaper`)
 - Persistent shell modules for bar, OSD, notifications, dashboard, launcher, and sidebar
 - Notification server support (configurable) with action/image support
-- Service layer for audio (`pactl` or `wpctl`), brightness, Bluetooth, network (`iwctl`/`iwd` or `nmcli`/`NetworkManager`), battery, and player state
+- Service layer for audio (`pactl` or `wpctl`), brightness, Bluetooth, network (`iwctl`/`iwd` or `nmcli`/`NetworkManager`), battery, wallpaper, and player state
 - Hardware-accelerated QML transitions and shader-backed visual effects
 
 ## Architecture
@@ -79,6 +79,7 @@ This separation keeps UI concerns, system logic, and user settings independent a
 | Dependency | Purpose |
 |---|---|
 | `python-pywal` | dynamic theme generation (`~/.cache/wal/colors.json`) |
+| `swaybg` / `swww` / `hyprpaper` | wallpaper rendering in compositor |
 | `pipewire`, `wireplumber` / `pulseaudio-utils` (`pactl`), `pamixer`, `playerctl` | audio control and media metadata |
 | `iwd` (`iwctl`) / `networkmanager` (`nmcli`) | network state and controls |
 | `bluez`, `bluez-utils` | Bluetooth state and device management |
@@ -111,7 +112,7 @@ chmod +x setup.sh
 wal -i /path/to/wallpaper
 ```
 
-Without this step, theme-dependent colors can appear missing.
+Without this step, theme-dependent colors can appear missing. You can also click the **Wallpaper** QuickToggle in the Control Center to cycle wallpapers automatically!
 
 ## Running and Reloading
 
@@ -194,7 +195,7 @@ Niri works automatically with QuickShell. Workspace switching uses `niri msg act
 
 ### Colors/theme not applied
 
-- run `wal -i /path/to/wallpaper`
+- run `wal -i /path/to/wallpaper` or click the Wallpaper toggle in Control Center
 - verify file exists: `~/.cache/wal/colors.json`
 - confirm `shell.json -> paths.pywalColors` points to the correct file
 

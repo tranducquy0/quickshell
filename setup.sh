@@ -19,6 +19,7 @@ if command -v pacman &> /dev/null; then
         "qt6-svg"
         "qt6-wayland"
         "python-pywal"
+        "swaybg"
         "pipewire"
         "wireplumber"
         "pulseaudio-utils"
