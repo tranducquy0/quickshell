@@ -2,15 +2,16 @@
 
 ![Qt](https://img.shields.io/badge/Qt-6.10+-41cd52?style=for-the-badge&logo=qt&logoColor=white)
 ![Wayland](https://img.shields.io/badge/Wayland-Supported-blue?style=for-the-badge&logo=wayland&logoColor=white)
-![Hyprland](https://img.shields.io/badge/Hyprland-Optimized-00a4a6?style=for-the-badge&logo=archlinux&logoColor=white)
+![Compositors](https://img.shields.io/badge/Hyprland%20%7C%20Niri-Supported-00a4a6?style=for-the-badge&logo=archlinux&logoColor=white)
 
-A modular desktop shell configuration built with [QuickShell](https://quickshell.org/) and QtQuick, designed for Wayland compositors and tuned for Hyprland.
+A modular desktop shell configuration built with [QuickShell](https://quickshell.org/) and QtQuick, designed for Wayland compositors (Hyprland & Niri supported out of the box).
 
 The project focuses on:
 - clean component boundaries (`components/`, `modules/`, `services/`)
 - dynamic theming via `pywal`
 - responsive UI behavior with smooth QML/scenegraph rendering
 - practical day-to-day features (OSD, notifications, launcher, dashboard, sidebar)
+- flexible system tooling support (`iwd`/`iwctl` or `NetworkManager`/`nmcli` networking, `pactl`/PulseAudio or `wpctl`/WirePlumber audio)
 
 ## Table of Contents
 
@@ -21,7 +22,7 @@ The project focuses on:
 - [Installation](#installation)
 - [Running and Reloading](#running-and-reloading)
 - [Configuration Reference](#configuration-reference)
-- [Hyprland Integration](#hyprland-integration)
+- [Compositor Integration (Hyprland & Niri)](#compositor-integration-hyprland--niri)
 - [Project Layout](#project-layout)
 - [Troubleshooting](#troubleshooting)
 - [Contributing & Code of Conduct](#contributing--code-of-conduct)
@@ -50,7 +51,7 @@ The project focuses on:
 - Dynamic wallpaper-driven color integration using `pywal`
 - Persistent shell modules for bar, OSD, notifications, dashboard, launcher, and sidebar
 - Notification server support (configurable) with action/image support
-- Service layer for audio, brightness, Bluetooth, network, battery, and player state
+- Service layer for audio (`pactl` or `wpctl`), brightness, Bluetooth, network (`iwctl`/`iwd` or `nmcli`/`NetworkManager`), battery, and player state
 - Hardware-accelerated QML transitions and shader-backed visual effects
 
 ## Architecture
@@ -71,15 +72,15 @@ This separation keeps UI concerns, system logic, and user settings independent a
 
 - QuickShell `v0.2+`
 - Qt `6.10+`
-- Wayland compositor (Hyprland recommended)
+- Wayland compositor (Hyprland or Niri)
 
 ### Core Packages/Services
 
 | Dependency | Purpose |
 |---|---|
 | `python-pywal` | dynamic theme generation (`~/.cache/wal/colors.json`) |
-| `pipewire`, `wireplumber`, `pamixer`, `playerctl` | audio control and media metadata |
-| `networkmanager` | network state and controls |
+| `pipewire`, `wireplumber` / `pulseaudio-utils` (`pactl`), `pamixer`, `playerctl` | audio control and media metadata |
+| `iwd` (`iwctl`) / `networkmanager` (`nmcli`) | network state and controls |
 | `bluez`, `bluez-utils` | Bluetooth state and device management |
 | `upower`, `power-profiles-daemon` | battery and power profile integration |
 | `grim`, `slurp` | Wayland screenshots |
@@ -137,6 +138,12 @@ Autostart with Hyprland:
 exec-once = quickshell
 ```
 
+Autostart with Niri (`config.kdl`):
+
+```kdl
+spawn-at-startup "quickshell"
+```
+
 ## Configuration Reference
 
 The runtime config file is `shell.json`.
@@ -153,8 +160,9 @@ The runtime config file is `shell.json`.
 
 Changes are watched and reloaded by `config/Config.qml` through `FileView`.
 
-## Hyprland Integration
+## Compositor Integration (Hyprland & Niri)
 
+### Hyprland Integration
 The setup script can append the following line to your Hyprland config:
 
 ```hyprlang
@@ -162,6 +170,9 @@ source = ~/.config/quickshell/hyprland-layer-config.conf
 ```
 
 If you prefer manual setup, add it yourself to `~/.config/hypr/hyprland.conf`.
+
+### Niri Integration
+Niri works automatically with QuickShell. Workspace switching uses `niri msg action focus-workspace <id>`, window geometry capture uses `niri msg -j focused-window`, and session logout uses `niri msg action quit`.
 
 ## Project Layout
 
@@ -195,8 +206,8 @@ If you prefer manual setup, add it yourself to `~/.config/hypr/hyprland.conf`.
 ### Bluetooth/network/audio controls are non-responsive
 
 - ensure required services are running:
-    - `systemctl --user status wireplumber`
-    - `systemctl status NetworkManager`
+    - `systemctl --user status wireplumber` or PulseAudio daemon
+    - `systemctl status iwd` or `systemctl status NetworkManager`
     - `systemctl status bluetooth`
 
 ### Hyprland visual glitches around layer-shell windows
