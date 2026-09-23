@@ -21,7 +21,9 @@ if command -v pacman &> /dev/null; then
         "python-pywal"
         "pipewire"
         "wireplumber"
+        "pulseaudio-utils"
         "networkmanager"
+        "iwd"
         "bluez"
         "bluez-utils"
         "upower"
@@ -84,7 +86,7 @@ else
     echo -e "${RED}✗ 'wal' command not found. Install python-pywal.${NC}"
 fi
 
-# 3. Hyprland Config Check
+# 3. Compositor Config Check
 HYPR_CONF="$HOME/.config/hypr/hyprland.conf"
 LAYER_CONF="$HOME/.config/quickshell/hyprland-layer-config.conf"
 
@@ -100,8 +102,10 @@ if [ -f "$HYPR_CONF" ]; then
         echo "source = $LAYER_CONF" >> "$HYPR_CONF"
         echo -e "${GREEN}✓ Added source to $HYPR_CONF${NC}"
     fi
+elif command -v niri &> /dev/null; then
+    echo -e "${GREEN}✓ Niri detected. Layer shell rules are handled natively by Niri.${NC}"
 else
-    echo -e "${BLUE}ℹ️ Hyprland config not found at $HYPR_CONF. Skipping integration.${NC}"
+    echo -e "${BLUE}ℹ️ Hyprland or Niri config check skipped.${NC}"
 fi
 
 # 4. Configure passwordless sudo for hardware access (optional)

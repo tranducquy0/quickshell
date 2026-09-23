@@ -16,9 +16,15 @@ Item {
     readonly property var idleInhibitor: QsServices.IdleInhibitor
 
     Process { id: lockProc; command: ["loginctl", "lock-session"] }
-    Process { id: logoutProc; command: ["hyprctl", "dispatch", "exit"] }
+    Process {
+        id: logoutProc
+        command: ["sh", "-c", 'if [ -n "$NIRI_SOCKET" ] || pgrep -x niri >/dev/null; then niri msg action quit --skip-confirmation; else hyprctl dispatch exit; fi']
+    }
     Process { id: sleepProc; command: ["systemctl", "suspend"] }
-    Process { id: wifiSettingsProc; command: ["nm-connection-editor"] }
+    Process {
+        id: wifiSettingsProc
+        command: ["sh", "-c", 'if command -v iwctl >/dev/null && ! command -v nmcli >/dev/null; then command -v impala >/dev/null && impala || (command -v alacritty >/dev/null && alacritty -e iwctl || xterm -e iwctl); else nm-connection-editor; fi']
+    }
     Process { id: bluetoothSettingsProc; command: ["blueman-manager"] }
     
     // DND state (simple toggle for now)

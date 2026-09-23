@@ -2,7 +2,7 @@
 
 ## Architecture
 
-QML-only desktop shell for Hyprland/Wayland using QuickShell v0.2+ / Qt 6.10.
+QML-only desktop shell for Hyprland/Niri Wayland compositors using QuickShell v0.2+ / Qt 6.10.
 
 ```
 shell.qml → BarWrapper.qml (panel per monitor) → Bar.qml
@@ -28,6 +28,7 @@ shell.qml → BarWrapper.qml (panel per monitor) → Bar.qml
 
 All services are QML `pragma Singleton` with `Process` objects for CLI calls.
 Services use `Timer`-based polling or `Connections` for event-driven updates.
+Core services support dynamic backends (e.g. `pactl`/`wpctl` for Audio, `iwctl`/`nmcli` for Network, `Niri`/`Hyprland` for Compositor controls).
 
 ```qml
 // services/Foo.qml

@@ -2,6 +2,7 @@ pragma Singleton
 
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Io
 import QtQuick 6.10
 
 Singleton {
@@ -14,11 +15,58 @@ Singleton {
     readonly property var activeToplevel: Hyprland.activeToplevel
     readonly property var focusedWorkspace: Hyprland.focusedWorkspace
     readonly property var focusedMonitor: Hyprland.focusedMonitor
-    readonly property int activeWsId: focusedWorkspace?.id ?? 1
+
+    property int niriActiveWsId: 1
+    readonly property int activeWsId: isNiri ? niriActiveWsId : (focusedWorkspace?.id ?? 1)
+    property bool isNiri: false
+
+    Component.onCompleted: {
+        checkNiriProc.exec(["sh", "-c", "if [ -n \"$NIRI_SOCKET\" ] || pgrep -x niri >/dev/null; then echo \"niri\"; else echo \"hyprland\"; fi"])
+    }
+
+    Process {
+        id: checkNiriProc
+        stdout: StdioCollector {
+            onStreamFinished: {
+                root.isNiri = text.trim() === "niri"
+                if (root.isNiri) {
+                    getNiriWsProc.running = true
+                }
+            }
+        }
+    }
+
+    Process {
+        id: getNiriWsProc
+        command: ["niri", "msg", "-j", "workspaces"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                try {
+                    const wsList = JSON.parse(text.trim())
+                    const activeWs = wsList.find(w => w.is_active || w.is_focused)
+                    if (activeWs) {
+                        root.niriActiveWsId = activeWs.idx ?? activeWs.id ?? 1
+                    }
+                } catch (e) {
+                }
+            }
+        }
+    }
 
     function dispatch(request: string): void {
+        if (isNiri) {
+            const wsMatch = request.match(/^workspace\s+(\d+)/)
+            if (wsMatch) {
+                const targetIdx = parseInt(wsMatch[1])
+                dispatchNiriWsProc.exec(["niri", "msg", "action", "focus-workspace", targetIdx.toString()])
+                root.niriActiveWsId = targetIdx
+                return
+            }
+        }
         Hyprland.dispatch(request);
     }
+
+    Process { id: dispatchNiriWsProc }
 
     function monitorFor(screen: var): var {
         return Hyprland.monitorFor(screen);
@@ -39,7 +87,11 @@ Singleton {
         running: true
         repeat: true
         onTriggered: {
-            Hyprland.refreshWorkspaces();
+            if (root.isNiri) {
+                if (!getNiriWsProc.running) getNiriWsProc.running = true
+            } else {
+                Hyprland.refreshWorkspaces();
+            }
         }
     }
 
@@ -47,6 +99,8 @@ Singleton {
         target: Hyprland
 
         function onRawEvent(event: var): void {
+            if (root.isNiri) return;
+
             const n = event.name;
             if (n.endsWith("v2"))
                 return;

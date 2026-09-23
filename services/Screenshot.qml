@@ -42,9 +42,8 @@ Singleton {
             screenshotProc.exec(["grim", filepath])
             root.lastScreenshotPath = filepath
         } else if (mode === "window") {
-            // For active window, we need to use hyprctl to get window geometry
-            // then use slurp with those coordinates
-            windowGeomProc.exec(["sh", "-c", "hyprctl activewindow -j | jq -r '.at[0],.at[1],.size[0],.size[1]' | paste -sd ' '"])
+            // For active window, check Niri first, then Hyprland
+            windowGeomProc.exec(["sh", "-c", "if [ -n \"$NIRI_SOCKET\" ] || pgrep -x niri >/dev/null; then geom=$(niri msg -j focused-window 2>/dev/null | jq -r 'if .x != null then \"\\(.x) \\(.y) \\(.width) \\(.height)\" elif .rect != null then \"\\(.rect.x) \\(.rect.y) \\(.rect.width) \\(.rect.height)\" else empty end' 2>/dev/null); if [ -n \"$geom\" ]; then echo \"$geom\"; exit 0; fi; fi; hyprctl activewindow -j | jq -r '.at[0],.at[1],.size[0],.size[1]' | paste -sd ' '"])
         }
     }
     
