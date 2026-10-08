@@ -2,29 +2,29 @@ import QtQuick 6.10
 
 QtObject {
     readonly property var rounding: QtObject {
-        property int small: 8
-        property int medium: 14
-        property int large: 20
-        property int extraLarge: 30
+        property int small: 0
+        property int medium: 1
+        property int large: 2
+        property int extraLarge: 2
         property int full: 9999
     }
 
     // Standardized radius (Material 3)
     readonly property var radius: QtObject {
-        property int xs: 6
-        property int s: 10
-        property int m: 16
-        property int l: 22
-        property int xl: 32
+        property int xs: 0
+        property int s: 1
+        property int m: 2
+        property int l: 2
+        property int xl: 2
         property int full: 9999
     }
 
     readonly property var spacing: QtObject {
-        property int tiny: 4
-        property int small: 8
-        property int medium: 12
-        property int large: 16
-        property int huge: 24
+        property int tiny: 2
+        property int small: 4
+        property int medium: 6
+        property int large: 8
+        property int huge: 12
     }
 
     readonly property var margins: QtObject {
@@ -44,11 +44,11 @@ QtObject {
     }
 
     readonly property var font: QtObject {
-        property string family: "Inter"
+        property string family: "monospace"
         property int small: 10
-        property int medium: 12
-        property int large: 14
-        property int huge: 16
+        property int medium: 11
+        property int large: 12
+        property int huge: 14
     }
 
     // Material 3 Typography Scale

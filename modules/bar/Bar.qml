@@ -45,20 +45,18 @@ Item {
     readonly property var pywal: QsServices.Pywal
     
     // ═══════════════════════════════════════════════════════════════════════
-    // MINIMAL AESTHETIC BAR
-    // Clean, professional, beautiful - inspired by modern Linux rice
-    // ═══════════════════════════════════════════════════════════════════════
+    // Compact desktop status bar: useful modules, visible separators, no floating cards.
     
-    // Main bar container with floating effect — pinned to top bar strip
+    // Main bar container — pinned to the full top strip
     Item {
         id: barContainer
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.leftMargin: 11
-        anchors.rightMargin: 11
-        anchors.topMargin: 1
-        height: config.bar.height - 2  // bar height minus top+bottom margin
+        anchors.leftMargin: 0
+        anchors.rightMargin: 0
+        anchors.topMargin: 0
+        height: config.bar.height
         
         // ═══════════════════════════════════════════════════════════════
         // LEFT MODULE - Workspaces
@@ -67,15 +65,15 @@ Item {
             id: leftModule
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            height: 32
+            height: config.bar.height
             width: leftContent.implicitWidth + 18
             
-            radius: 20
+            radius: 0
             color: pywal.surfaceContainerHigh
             strokeColor: pywal.outlineVariant
-            borderWidth: 0
+            borderWidth: 1
             accentColor: pywal.primary
-            elevation: 3
+            elevation: 0
             
             // Smooth transitions
             Behavior on color {
@@ -116,15 +114,15 @@ Item {
             id: centerModule
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            height: 32
+            height: config.bar.height
             width: clockLoader.implicitWidth + 22
             
-            radius: 20
+            radius: 0
             color: pywal.surfaceContainerHighest
-            strokeColor: pywal.outlineVariant
-            borderWidth: 0
+            strokeColor: pywal.primary
+            borderWidth: 1
             accentColor: pywal.primary
-            elevation: 4
+            elevation: 0
             highlighted: true
             
             Behavior on color {
@@ -183,14 +181,14 @@ Item {
             // ═══ PILL 1: Network + Bluetooth (Connectivity) ═══
             AuroraSurface {
                 id: connectivityPill
-                height: 32
+                height: config.bar.height
                 width: connectivityContent.implicitWidth + 18
-                radius: 20
+                radius: 0
                 color: pywal.surfaceContainerHigh
                 strokeColor: pywal.outlineVariant
-                borderWidth: 0
+                borderWidth: 1
                 accentColor: pywal.info
-                elevation: 3
+                elevation: 0
                 
                 Behavior on color {
                     ColorAnimation { duration: 300 }
@@ -264,14 +262,14 @@ Item {
             // ═══ PILL 2: Brightness + Volume (Audio/Display) ═══
             AuroraSurface {
                 id: audioPill
-                height: 32
+                height: config.bar.height
                 width: audioContent.implicitWidth + 18
-                radius: 20
+                radius: 0
                 color: pywal.surfaceContainerHigh
                 strokeColor: pywal.outlineVariant
-                borderWidth: 0
+                borderWidth: 1
                 accentColor: pywal.secondary
-                elevation: 3
+                elevation: 0
                 
                 Behavior on color {
                     ColorAnimation { duration: 300 }
@@ -329,14 +327,14 @@ Item {
             // ═══ PILL 3: Battery + Control Center + Tray ═══
             AuroraSurface {
                 id: powerPill
-                height: 32
+                height: config.bar.height
                 width: powerContent.implicitWidth + 18
-                radius: 20
+                radius: 0
                 color: pywal.surfaceContainerHigh
                 strokeColor: pywal.outlineVariant
-                borderWidth: 0
+                borderWidth: 1
                 accentColor: pywal.primary
-                elevation: 3
+                elevation: 0
                 
                 Behavior on color {
                     ColorAnimation { duration: 300 }
@@ -414,15 +412,15 @@ Item {
             anchors.left: leftModule.right
             anchors.leftMargin: 8
             anchors.verticalCenter: parent.verticalCenter
-            height: 32
+            height: config.bar.height
             width: mediaPlayerLoader.implicitWidth + 18
             
-            radius: 20
+            radius: 0
             color: pywal.surfaceContainerHigh
             strokeColor: pywal.outlineVariant
-            borderWidth: 0
+            borderWidth: 1
             accentColor: pywal.secondary
-            elevation: 3
+            elevation: 0
             
             clip: true
             

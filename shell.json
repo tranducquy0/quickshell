@@ -1,6 +1,6 @@
 {
   "appearance": {
-    "fontFamily": "Inter",
+    "fontFamily": "monospace",
     "materialIconFont": "Material Design Icons"
   },
   "paths": {

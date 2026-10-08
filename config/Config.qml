@@ -19,7 +19,7 @@ Singleton {
     }
 
     readonly property var appearance: ({
-        fontFamily: data.appearance?.fontFamily ?? "Inter",
+        fontFamily: data.appearance?.fontFamily ?? "monospace",
         materialIconFont: data.appearance?.materialIconFont ?? "Material Design Icons"
     })
 

@@ -31,7 +31,7 @@ Item {
                 color: Pywal.foreground
                 font.pixelSize: 12
                 font.weight: Font.Bold
-                font.family: "Inter"
+                font.family: "monospace"
                 font.letterSpacing: 0.3
             }
             
@@ -42,7 +42,7 @@ Item {
                 color: Pywal.primary
                 font.pixelSize: 12
                 font.weight: Font.Bold
-                font.family: "Inter"
+                font.family: "monospace"
                 opacity: 0.4
                 
                 // Blinks once per second via timer instead of continuous animation
@@ -62,7 +62,7 @@ Item {
                 color: Pywal.foreground
                 font.pixelSize: 12
                 font.weight: Font.Bold
-                font.family: "Inter"
+                font.family: "monospace"
                 font.letterSpacing: 0.3
             }
         }
@@ -74,7 +74,7 @@ Item {
             color: Qt.rgba(Pywal.foreground.r, Pywal.foreground.g, Pywal.foreground.b, 0.6)
             font.pixelSize: 10
             font.weight: Font.Medium
-            font.family: "Inter"
+            font.family: "monospace"
         }
     }
 

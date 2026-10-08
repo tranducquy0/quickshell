@@ -8,7 +8,8 @@ Item {
     property color strokeColor: pywal.outlineVariant
     property color accentColor: pywal.primary
     property color shadowColor: pywal.shadow
-    property real radius: 20
+    // Desktop-software surfaces: square corners and a visible frame instead of floating cards.
+    property real radius: 2
     property real borderWidth: 1
     property int elevation: 2
     property real accentOpacity: 0.10
@@ -41,18 +42,19 @@ Item {
             : 0
 
     Elevation {
-        level: root.highlighted ? root.elevation + 2 : root.hovered ? root.elevation + 1 : root.elevation
+        // Keep the old API, but make the 90s desktop treatment flat and legible.
+        level: 0
         target: surface
         radius: surface.radius
-        shadowColor: Qt.rgba(root.shadowColor.r, root.shadowColor.g, root.shadowColor.b, root.highlighted ? 0.24 : 0.18)
+        shadowColor: Qt.rgba(root.shadowColor.r, root.shadowColor.g, root.shadowColor.b, 0)
     }
 
     Rectangle {
         id: surface
         anchors.fill: parent
-        radius: root.radius
+        radius: Math.min(root.radius, 2)
         color: root.resolvedSurfaceColor
-        border.width: root.borderWidth
+        border.width: Math.max(root.borderWidth, 1)
         border.color: root.resolvedBorderColor
         clip: root.clipContent
 
